@@ -21,18 +21,22 @@ public class PatientService {
 	@GET
 	@Path("/")
 	@Produces(MediaType.TEXT_HTML)
-	public String readPatients() {
-		return patientObj.readPatients();
+	public String readPatient() {
+		return patientObj.readPatient();
 	}
 
 	@POST
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.TEXT_PLAIN)
-	public String insertPatient(@FormParam("Pid") String Pid,@FormParam("first") String first, @FormParam("lname") String lname,
-			@FormParam("email") String email, @FormParam("age") String age, @FormParam("mobile") String mobile,
-			@FormParam("password") String password){
-		String output = patientObj.insertPatient(Pid,first, lname, email, age, mobile, password );
+	public String insertPatient (	@FormParam("first") String patfirst,
+									@FormParam("lname") String patlname,
+									@FormParam("email") String patemail,
+									@FormParam("age") String patage,
+									@FormParam("mobile") String patmobile,
+									@FormParam("password") String patpassword)
+	{
+		String output = patientObj.insertPatient(patfirst, patlname, patemail, patage, patmobile, patpassword );
 		return output;
 	}
 
@@ -40,17 +44,20 @@ public class PatientService {
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
-	public String updatePatient(String PatientData) {
+	public String updatePatient(String patData) {
 		// Convert the input string to a JSON object
-		JsonObject patientObject = new JsonParser().parse(PatientData).getAsJsonObject();
+		JsonObject patientObject = new JsonParser().parse(patData).getAsJsonObject();
+		
 		// Read the values from the JSON object
-		String first = patientObject.get("firt").getAsString();
-		String lname = patientObject.get("lname").getAsString();
-		String email =patientObject.get("email").getAsString();
-		String age = patientObject.get("age").getAsString();
-		String mobile = patientObject.get("mobile").getAsString();
-		String password = patientObject.get("password").getAsString();
-		String output = patientObj.updatePatient(first, lname, email, age, mobile,password);
+		String patUid = patientObject.get("Uid").getAsString();
+		String patfirst = patientObject.get("first").getAsString();
+		String patlname = patientObject.get("lname").getAsString();
+		String patemail = patientObject.get("email").getAsString();
+		String patage = patientObject.get("age").getAsString();
+		String patmobile = patientObject.get("mobile").getAsString();
+		String patpassword = patientObject.get("password").getAsString();
+		
+		String output = patientObj.updatePatient(patUid, patfirst,patlname,patemail,patage,patmobile,patpassword );
 		return output;
 	}
 
@@ -58,13 +65,13 @@ public class PatientService {
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_XML)
 	@Produces(MediaType.TEXT_PLAIN)
-	public String deletePatient(String PatientData) {
+	public String deletePatient(String patData) {
 		// Convert the input string to an XML document
-		Document doc = Jsoup.parse(PatientData, "", Parser.xmlParser());
+		Document doc = Jsoup.parse(patData, "", Parser.xmlParser());
 
 		// Read the value from the element <itemID>
-		String email = doc.select("email").text();
-		String output = patientObj.deletePatient(email);
+		String patUid = doc.select("Uid").text();
+		String output = patientObj.deletePatient(patUid);
 		return output;
 	}
 	
