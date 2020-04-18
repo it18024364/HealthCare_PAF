@@ -1,5 +1,7 @@
 package model;
 
+import DBconnection.DB;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -7,29 +9,15 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 public class Patient {
-	// A common method to connect to the DB
-		private Connection connect() {
-			Connection con = null;
-			try {
-				Class.forName("com.mysql.jdbc.Driver");
-
-				// Provide the correct details: DBServer/DBName, username, password
-				con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/gaming?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC","root","");
-				
-				//For testing
-			       System.out.println("DBSuccessfully connected for read values");
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return con;
-		}
-
+	
+	DB dbobj1 = new DB();
+	
 		public String insertPatient(String patfirst, String patlname, String patemail, String patage, String patmobile, String patpassword) {
 			
 			String output = "";
 			
 			try {
-				Connection con = connect();
+				Connection con = dbobj1.connect();
 				if (con == null) {
 					return "Error while connecting to the database for inserting.";
 				}
@@ -75,14 +63,14 @@ public class Patient {
 			String output = "";
 			try {
 				
-				Connection con = connect();
+				Connection con = dbobj1.connect();
 				if (con == null) {
 					return "Error while connecting to the database for reading.";
 				}
 				
 				
 				// Prepare the html table to be displayed
-				output = "<table border=\"1\"><tr><th>First</th><th>lname</th><th>email</th><th>age</th><th>mobile</th><th>password</th><th>Update</th><th>Remove</th></tr>";
+				output = "<table border=\"1\"><tr><th>First</th><th>lname</th><th>email</th><th>age</th><th>mobile</th><th>password</th>";
 				String query = "select * from user";
 				Statement stmt = con.createStatement();
 				ResultSet rs = stmt.executeQuery(query);
@@ -107,11 +95,7 @@ public class Patient {
 					output += "<td>" + mobile + "</td>";
 					output += "<td>" + password + "</td>";
 					
-					// buttons
-					output += "<td><input name=\"btnUpdate\" type=\"button\" value=\"Update\" class=\"btn btn-secondary\"></td>"
-							+ "<td><form method=\"post\" action=\"index.jsp\">"//patient
-							+ "<input name=\"btnRemove\" type=\"submit\" value=\"Remove\" class=\"btn btn-danger\">"
-							+ "<input name=\"Uid\" type=\"hidden\" value=\"" + Uid + "\">" + "</form></td></tr>";
+					
 				}
 				con.close();
 				// Complete the html table
@@ -128,7 +112,7 @@ public class Patient {
 			String output = "";
 			
 			try {
-				Connection con = connect();
+				Connection con = dbobj1.connect();
 				if (con == null) {
 					return "Error while connecting to the database for updating.";
 				}
@@ -169,7 +153,7 @@ public class Patient {
 			String output = "";
 			
 			try {
-				Connection con = connect();
+				Connection con = dbobj1.connect();
 				if (con == null) {
 					return "Error while connecting to the database for deleting.";
 				}

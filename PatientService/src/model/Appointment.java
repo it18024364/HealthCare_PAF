@@ -1,4 +1,7 @@
 package model;
+
+import DBconnection.DB;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -7,33 +10,16 @@ import java.sql.Statement;
 
 
 public class Appointment {
-
-	// A common method to connect to the DB
-			private Connection connect() {
-				Connection con = null;
-				try {
-					Class.forName("com.mysql.jdbc.Driver");
-
-					// Provide the correct details: DBServer/DBName, username, password
-					con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/gaming?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC","root","");
-					
-					//For testing
-				       System.out.println("DBSuccessfully connected Appointment ");
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				return con;
-			}
-			
 	
-			
+	DB DBobj = new DB();
+	
 			
 			public String insertAppointment(String appPid,String appDname, String appPname, String appDate) {
 				
 				String output = "";
 				
 				try {
-					Connection con = connect();
+					Connection con = DBobj.connect();
 					if (con == null) {
 						return "Error while connecting to the database for Appointment.";
 					}
