@@ -105,14 +105,14 @@ public class Payment {
 		{return "Error while connecting to the database for updating."; }
 	
 		// create a prepared statement
-		String query = "UPDATE payments SET payID=?,cardHolderName=?,cardNumber=?,charge=?,paidDate=System.currentTimeMillis() WHERE itemID=?";
+		String query = "UPDATE payments SET cardHolderName=?,cardNumber=?,charge=?,paidDate=current_timestamp WHERE itemID=?";
 	PreparedStatement preparedStmt = con.prepareStatement(query);
 	
 		// binding values
 		preparedStmt.setString(1, name);
 		preparedStmt.setString(2, number);
 		preparedStmt.setFloat(3, Float.parseFloat(charge));
-		preparedStmt.setInt(5, Integer.parseInt(ID));
+		preparedStmt.setInt(4, Integer.parseInt(ID));
 	
 		// execute the statement
 		preparedStmt.execute();
@@ -121,7 +121,7 @@ public class Payment {
 	}
 	catch (Exception e)
 	{
-		output = "Error while updating the item.";
+		output = "Error while updating the payment.";
 		System.err.println(e.getMessage());
 	}
 	return output;
